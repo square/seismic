@@ -24,7 +24,7 @@ You can also depend on the .jar through Maven:
 Contributing
 ------------
 
-If you would like to contribute code to Otto you can do so through GitHub by
+If you would like to contribute code to Seismic you can do so through GitHub by
 forking the repository and sending a pull request.
 
 When submitting code, please make every effort to follow existing conventions
