@@ -91,8 +91,11 @@ public class ShakeDetector implements SensorEventListener {
     float ay = event.values[1];
     float az = event.values[2];
 
-    final double magnitude = Math.sqrt(ax * ax + ay * ay + az * az);
-    return magnitude > ACCELERATION_THRESHOLD;
+    // Instead of comparing magnitude to ACCELERATION_THRESHOLD,
+    // compare their squares. This is equivalent and doesn't need the 
+    // actual magnitude, which would be computed using (expesive) Math.sqrt().
+    final double magnitudeSquared = ax * ax + ay * ay + az * az;
+    return magnitudeSquared > ACCELERATION_THRESHOLD * ACCELERATION_THRESHOLD;
   }
 
   /** Queue of samples. Keeps a running average. */
