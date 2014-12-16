@@ -1,5 +1,5 @@
-Seismic by Square, Inc.
-=============================
+Seismic
+=======
 
 Android device shake detection.
 
@@ -8,16 +8,17 @@ Android device shake detection.
 Download
 --------
 
-Downloadable .jars can be found on the [GitHub download page][1].
-
-You can also depend on the .jar through Maven:
-
+Download [the latest .jar][dl] or depend via Maven:
 ```xml
 <dependency>
-    <groupId>com.squareup</groupId>
-    <artifactId>seismic</artifactId>
-    <version>(insert latest version)</version>
+  <groupId>com.squareup</groupId>
+  <artifactId>seismic</artifactId>
+  <version>1.0.0</version>
 </dependency>
+```
+or Gradle:
+```groovy
+compile 'com.squareup:seismic:1.0.0'
 ```
 
 
@@ -41,4 +42,4 @@ License
 
 
 
- [1]: http://github.com/square/seismic/downloads
+ [dl]: https://search.maven.org/remote_content?g=com.squareup&a=seismic&v=LATEST
