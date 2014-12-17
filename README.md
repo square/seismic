@@ -13,12 +13,12 @@ Download [the latest .jar][dl] or depend via Maven:
 <dependency>
   <groupId>com.squareup</groupId>
   <artifactId>seismic</artifactId>
-  <version>1.0.0</version>
+  <version>1.0.1</version>
 </dependency>
 ```
 or Gradle:
 ```groovy
-compile 'com.squareup:seismic:1.0.0'
+compile 'com.squareup:seismic:1.0.1'
 ```
 
 
