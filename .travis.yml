@@ -1,13 +1,21 @@
 language: android
 
-jdk:
- - oraclejdk7
- - oraclejdk8
-
 android:
   components:
     - build-tools-21.1.1
     - android-16
+
+jdk:
+  - oraclejdk7
+  - oraclejdk8
+
+after_success:
+  - .buildscript/deploy_snapshot.sh
+
+env:
+  global:
+    - secure: "Nurkjp7TQN/gvo+EczcvTy49E/dmj2zKOCmPMaS6rk4kJxBKOwg/qB89WSqoYxri4IODBe8bm4k6tC2JasdPVFDjmmRh416Zmw2TtImiVcLpm7W1KoiS2Vuk6hJTw1M9jwa4LbPCppSY8KYjLBwshubrj+84TwUBMk26hKB9L/I="
+    - secure: "nca6vn7UZLNgEBLvAGejJNLyoqG6r/w47pGOmTc1t+rKE62NVu+mvAunqVocd3RJ8Z4E84L2b9tAe0gGR3QTGb5cn5NOXZ9n7BVx9oA0MKdzfEJqU8RH4wz6ZLzOl6/KRn/IGPAUxYr2qprehIuUk5mcly9sllaq2dqUFKwfwSc="
 
 branches:
   except:
@@ -15,3 +23,9 @@ branches:
 
 notifications:
   email: false
+
+sudo: false
+
+cache:
+  directories:
+    - $HOME/.m2
