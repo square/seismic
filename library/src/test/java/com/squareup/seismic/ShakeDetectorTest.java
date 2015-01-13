@@ -1,5 +1,7 @@
 package com.squareup.seismic;
 
+import android.hardware.SensorEvent;
+
 import org.junit.Test;
 
 import java.util.List;
@@ -18,7 +20,7 @@ public class ShakeDetectorTest {
 
     // These times approximate the data rate of the slowest device we've
     // found, the LG Ally.
-    // on the LG Ally. The queue holds 500000000 ns (0.5ms) of samples or
+    // On the LG Ally the queue holds 500000000 ns (0.5ms) of samples or
     // 4 samples, whichever is greater.
     // 500000000
     q.add(1000000000L, false);
@@ -71,4 +73,102 @@ public class ShakeDetectorTest {
     q.clear();
     assertThat(q.isShaking()).isFalse();
   }
+
+
+  public class ShakeCounter implements ShakeDetector.Listener {
+    public int shakes = 0;
+
+    @Override
+    public void hearShake() {
+      shakes++;
+    }
+  }
+
+  long now = 0;
+
+  /** Force-feeds d milliseconds of shaking to s.
+    */
+
+  public void addShake(ShakeDetector s, int d) {
+    int n = 0;
+    while (n < d) {
+      s.actualOnSensorChanged(new float[] { 1000.0f, 1000.0f, 9.81f }, now);
+      n += 40;
+      now += 40000000;
+    }
+  }
+
+
+  /** Force-feeds d milliseconds of perfect peace to s.
+    */
+
+  public void addSilence(ShakeDetector s, int d) {
+    int n = 0;
+    while (n < d) {
+      s.actualOnSensorChanged(new float[] { 0.0f, 0.0f, 9.81f }, now);
+      n += 40;
+      now += 40000000;
+    }
+  }
+
+
+  /** Tests that a one-second shake results in one hearShake() call. */
+  @Test public void testHearShake() {
+    ShakeCounter c = new ShakeCounter();
+    ShakeDetector s = new ShakeDetector(c);
+
+    addShake(s, 1000);
+
+    assertThat(c.shakes == 1).isTrue();
+  }
+
+
+  /** Tests that a one-second shake followed by one second of peace
+   *  followed by another shake results in two hearShake() calls.
+    */
+
+  @Test public void testHearTwoShakes() {
+    ShakeCounter c = new ShakeCounter();
+    ShakeDetector s = new ShakeDetector(c);
+
+    addShake(s, 1000);
+    addSilence(s, 1000);
+    addShake(s, 1000);
+
+    assertThat(c.shakes == 2).isTrue();
+  }
+
+
+  /** Tests that a briefly interrupted shakes only count as one.
+   */
+
+  @Test public void testDisregardCloseShakes() {
+    ShakeCounter c = new ShakeCounter();
+    ShakeDetector s = new ShakeDetector(c);
+
+    addShake(s, 1000);
+    addSilence(s, 100);
+    addShake(s, 1000);
+    assertThat(c.shakes == 1).isTrue();
+
+    addSilence(s, 1000);
+    addShake(s, 1000);
+    assertThat(c.shakes == 2).isTrue();
+  }
+
+
+  /** Tests that short shakes simply aren't. */
+
+  @Test public void testDisregardShortShakes() {
+    ShakeCounter c = new ShakeCounter();
+    ShakeDetector s = new ShakeDetector(c);
+
+    addShake(s, 200);
+    addSilence(s, 1000);
+    addShake(s, 200);
+
+    assertThat(c.shakes == 0).isTrue();
+  }
+
+
 }

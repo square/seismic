@@ -36,6 +36,8 @@ public class ShakeDetector implements SensorEventListener {
   private SensorManager sensorManager;
   private Sensor accelerometer;
 
+  private boolean stillShaking = false;
+
   public ShakeDetector(Listener listener) {
     this.listener = listener;
   }
@@ -76,20 +78,38 @@ public class ShakeDetector implements SensorEventListener {
   }
 
   @Override public void onSensorChanged(SensorEvent event) {
-    boolean accelerating = isAccelerating(event);
-    long timestamp = event.timestamp;
-    queue.add(timestamp, accelerating);
-    if (queue.isShaking()) {
+    actualOnSensorChanged(event.values, event.timestamp);
+  }
+
+
+  /** This slight change of onSensorChanged() exists for testing;
+   *  the tests cannot create a SensorEvent so onSensorChanged()
+   *  itself cannot be used in the tests.
+   */
+  public void actualOnSensorChanged(final float[] values, long timestamp) {
+    queue.add(timestamp, isAccelerating(values));
+    if (!queue.canDecide()) {
+      // not enough data yet, wait
+    } else if (!queue.isShaking()) {
+      // device is not longer shaking, so allow another shake to commence
+      stillShaking = false;
+    } else if (!stillShaking) {
+      // the device is shaking, and we've seen enough of a pause to
+      // be sure it's not just a continuation of the previous shake.
       queue.clear();
       listener.hearShake();
+      stillShaking = true;
+    } else {
+      // the device is shaking, but we've already reacted to this shake,
+      // the user just hasn't stopped shaking yet.
     }
   }
 
   /** Returns true if the device is currently accelerating. */
-  private boolean isAccelerating(SensorEvent event) {
-    float ax = event.values[0];
-    float ay = event.values[1];
-    float az = event.values[2];
+  private boolean isAccelerating(final float[] values) {
+    float ax = values[0];
+    float ay = values[1];
+    float az = values[2];
 
     // Instead of comparing magnitude to ACCELERATION_THRESHOLD,
     // compare their squares. This is equivalent and doesn't need the
@@ -192,13 +212,21 @@ public class ShakeDetector implements SensorEventListener {
     }
 
     /**
+     * Returns true if we have enough samples to decide whether the
+     * user is shaking the device.
+     */
+    boolean canDecide() {
+      return newest != null
+          && oldest != null
+          && newest.timestamp - oldest.timestamp >= MIN_WINDOW_SIZE;
+    }
+
+    /**
      * Returns true if we have enough samples and more than 3/4 of those samples
      * are accelerating.
      */
     boolean isShaking() {
-      return newest != null
-          && oldest != null
-          && newest.timestamp - oldest.timestamp >= MIN_WINDOW_SIZE
+      return canDecide()
           && acceleratingCount >= (sampleCount >> 1) + (sampleCount >> 2);
     }
   }
