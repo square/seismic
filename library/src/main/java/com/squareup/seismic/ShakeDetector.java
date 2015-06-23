@@ -19,15 +19,11 @@ import java.util.List;
 public class ShakeDetector implements SensorEventListener {
 
   /** Default sensitivity values. */
-  @SuppressWarnings("unused") public final class Sensitivity {
-    public static final int LIGHT = 11;
-    public static final int MEDIUM = 13;
-    public static final int HARD = 15;
+  public static final int SENSITIVITY_LIGHT = 11;
+  public static final int SENSITIVITY_MEDIUM = 13;
+  public static final int SENSITIVITY_HARD = 15;
 
-    private Sensitivity() { }
-  }
-
-  private static final int DEFAULT_ACCELERATION_THRESHOLD = Sensitivity.MEDIUM;
+  private static final int DEFAULT_ACCELERATION_THRESHOLD = SENSITIVITY_MEDIUM;
 
   /**
    * When the magnitude of total acceleration exceeds this
