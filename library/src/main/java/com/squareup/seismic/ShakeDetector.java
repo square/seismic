@@ -18,11 +18,18 @@ import java.util.List;
  */
 public class ShakeDetector implements SensorEventListener {
 
+  /** Default sensitivity values. */
+  public static final int SENSITIVITY_LIGHT = 11;
+  public static final int SENSITIVITY_MEDIUM = 13;
+  public static final int SENSITIVITY_HARD = 15;
+
+  private static final int DEFAULT_ACCELERATION_THRESHOLD = SENSITIVITY_MEDIUM;
+
   /**
    * When the magnitude of total acceleration exceeds this
    * value, the phone is accelerating.
    */
-  private static final int ACCELERATION_THRESHOLD = 13;
+  private int accelerationThreshold = DEFAULT_ACCELERATION_THRESHOLD;
 
   /** Listens for shakes. */
   public interface Listener {
@@ -95,7 +102,12 @@ public class ShakeDetector implements SensorEventListener {
     // compare their squares. This is equivalent and doesn't need the
     // actual magnitude, which would be computed using (expesive) Math.sqrt().
     final double magnitudeSquared = ax * ax + ay * ay + az * az;
-    return magnitudeSquared > ACCELERATION_THRESHOLD * ACCELERATION_THRESHOLD;
+    return magnitudeSquared > accelerationThreshold * accelerationThreshold;
+  }
+
+  /** Sets the acceleration threshold sensitivity. */
+  public void setSensitivity(int accelerationThreshold) {
+    this.accelerationThreshold = accelerationThreshold;
   }
 
   /** Queue of samples. Keeps a running average. */
@@ -123,7 +135,7 @@ public class ShakeDetector implements SensorEventListener {
      * Adds a sample.
      *
      * @param timestamp    in nanoseconds of sample
-     * @param accelerating true if > {@link #ACCELERATION_THRESHOLD}.
+     * @param accelerating true if > {@link #accelerationThreshold}.
      */
     void add(long timestamp, boolean accelerating) {
       // Purge samples that proceed window.
@@ -208,7 +220,7 @@ public class ShakeDetector implements SensorEventListener {
     /** Time sample was taken. */
     long timestamp;
 
-    /** If acceleration > {@link #ACCELERATION_THRESHOLD}. */
+    /** If acceleration > {@link #accelerationThreshold}. */
     boolean accelerating;
 
     /** Next sample in the queue or pool. */
