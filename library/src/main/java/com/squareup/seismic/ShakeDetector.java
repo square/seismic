@@ -49,7 +49,7 @@ public class ShakeDetector implements SensorEventListener {
   /**
    * Starts listening for shakes on devices with appropriate hardware.
    *
-   * @returns true if the device supports shake detection.
+   * @return true if the device supports shake detection.
    */
   public boolean start(SensorManager sensorManager) {
     // Already started?
