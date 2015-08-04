@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Detects phone shaking. If > 75% of the samples taken in the past 0.5s are
+ * Detects phone shaking. If more than 75% of the samples taken in the past 0.5s are
  * accelerating, the device is a) shaking, or b) free falling 1.84m (h =
  * 1/2*g*t^2*3/4).
  *
