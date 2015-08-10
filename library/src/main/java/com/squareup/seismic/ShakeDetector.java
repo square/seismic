@@ -203,7 +203,7 @@ public class ShakeDetector implements SensorEventListener {
     void setWindowSize(long size) {
       maxWindowSize = size;
       minWindowSize = maxWindowSize >> 1;
-      if (sampleCount > 0) {
+      if (sampleCount > MIN_QUEUE_SIZE) {
         purge(newest.timestamp - maxWindowSize);
       }
     }
