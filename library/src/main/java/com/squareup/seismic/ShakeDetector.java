@@ -99,7 +99,7 @@ public class ShakeDetector implements SensorEventListener {
 
     // Instead of comparing magnitude to ACCELERATION_THRESHOLD,
     // compare their squares. This is equivalent and doesn't need the
-    // actual magnitude, which would be computed using (expesive) Math.sqrt().
+    // actual magnitude, which would be computed using (expensive) Math.sqrt().
     final double magnitudeSquared = ax * ax + ay * ay + az * az;
     return magnitudeSquared > accelerationThreshold * accelerationThreshold;
   }
