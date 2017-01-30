@@ -75,6 +75,7 @@ public class ShakeDetector implements SensorEventListener {
    */
   public void stop() {
     if (accelerometer != null) {
+      queue.clear();
       sensorManager.unregisterListener(this, accelerometer);
       sensorManager = null;
       accelerometer = null;
