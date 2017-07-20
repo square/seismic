@@ -25,7 +25,7 @@ public class Demo extends Activity implements ShakeDetector.Listener {
     setContentView(tv, new LayoutParams(MATCH_PARENT, MATCH_PARENT));
   }
 
-  public void hearShake() {
+  @Override public void hearShake() {
     Toast.makeText(this, "Don't shake me, bro!", Toast.LENGTH_SHORT).show();
   }
 }
