@@ -18,7 +18,7 @@ Download [the latest .jar][dl] or depend via Maven:
 ```
 or Gradle:
 ```groovy
-compile 'com.squareup:seismic:1.0.2'
+implementation 'com.squareup:seismic:1.0.2'
 ```
 
 Snapshots of the development version are available in [Sonatype's `snapshots` repository][snap].
