@@ -45,7 +45,7 @@
     <android.platform>16</android.platform>
 
     <!-- Test Dependencies -->
-    <junit.version>4.10</junit.version>
+    <junit.version>4.13.1</junit.version>
     <fest.version>2.0M7</fest.version>
   </properties>
 
