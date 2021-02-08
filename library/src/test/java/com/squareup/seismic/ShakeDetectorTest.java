@@ -71,4 +71,19 @@ public class ShakeDetectorTest {
     q.clear();
     assertThat(q.isShaking()).isFalse();
   }
+
+  @Test public void testWindowSize() {
+    ShakeDetector.SampleQueue q = new ShakeDetector.SampleQueue();
+    q.setWindowSize(4000000000L);
+    q.add(1000000000L, true);
+    q.add(2000000000L, true);
+    q.add(3000000000L, true);
+    q.add(4000000000L, true);
+    q.add(5000000000L, true);
+    q.add(6000000000L, true);
+    q.add(7000000000L, true);
+    assertThat(q.asList()).hasSize(5);
+    q.setWindowSize(1000000000L);
+    assertThat(q.asList()).hasSize(4); // MIN_QUEUE_SIZE
+  }
 }
