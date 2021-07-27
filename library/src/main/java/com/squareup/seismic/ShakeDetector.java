@@ -71,7 +71,7 @@ public class ShakeDetector implements SensorEventListener {
     }
 
     accelerometer = sensorManager.getDefaultSensor(
-            Sensor.TYPE_ACCELEROMETER);
+        Sensor.TYPE_ACCELEROMETER);
 
     // If this phone has an accelerometer, listen to it.
     if (accelerometer != null) {
