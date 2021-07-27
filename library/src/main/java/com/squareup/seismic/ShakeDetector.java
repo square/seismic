@@ -52,19 +52,28 @@ public class ShakeDetector implements SensorEventListener {
    * @return true if the device supports shake detection.
    */
   public boolean start(SensorManager sensorManager) {
+    return start(sensorManager, SensorManager.SENSOR_DELAY_FASTEST);
+  }
+
+  /**
+   * Starts listening for shakes on devices with appropriate hardware. Allowing to set the sensor delay, available values are:
+   * SENSOR_DELAY_FASTEST, SENSOR_DELAY_GAME, SENSOR_DELAY_UI, SENSOR_DELAY_NORMAL. @see <a href="https://developer.android.com/reference/android/hardware/SensorManager">SensorManager</a>
+   *
+   * @return true if the device supports shake detection.
+   */
+  public boolean start(SensorManager sensorManager, int sensorDelay) {
     // Already started?
     if (accelerometer != null) {
       return true;
     }
 
     accelerometer = sensorManager.getDefaultSensor(
-        Sensor.TYPE_ACCELEROMETER);
+            Sensor.TYPE_ACCELEROMETER);
 
     // If this phone has an accelerometer, listen to it.
     if (accelerometer != null) {
       this.sensorManager = sensorManager;
-      sensorManager.registerListener(this, accelerometer,
-          SensorManager.SENSOR_DELAY_FASTEST);
+      sensorManager.registerListener(this, accelerometer, sensorDelay);
     }
     return accelerometer != null;
   }
