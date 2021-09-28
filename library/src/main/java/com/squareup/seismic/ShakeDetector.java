@@ -122,12 +122,20 @@ public class ShakeDetector implements SensorEventListener {
     this.accelerationThreshold = accelerationThreshold;
   }
 
+  /** Sets window size. */
+  public void setWindowSize(long size) {
+    queue.setWindowSize(size);
+  }
+
   /** Queue of samples. Keeps a running average. */
   static class SampleQueue {
 
+    private static final long DEFAULT_MAX_WINDOW_SIZE = 500000000; // 0.5s
+    private static final long DEFAULT_MIN_WINDOW_SIZE = DEFAULT_MAX_WINDOW_SIZE >> 1; // 0.25s
+
     /** Window size in ns. Used to compute the average. */
-    private static final long MAX_WINDOW_SIZE = 500000000; // 0.5s
-    private static final long MIN_WINDOW_SIZE = MAX_WINDOW_SIZE >> 1; // 0.25s
+    private long maxWindowSize = DEFAULT_MAX_WINDOW_SIZE;
+    private long minWindowSize = DEFAULT_MIN_WINDOW_SIZE;
 
     /**
      * Ensure the queue size never falls below this size, even if the device
@@ -151,7 +159,7 @@ public class ShakeDetector implements SensorEventListener {
      */
     void add(long timestamp, boolean accelerating) {
       // Purge samples that proceed window.
-      purge(timestamp - MAX_WINDOW_SIZE);
+      purge(timestamp - maxWindowSize);
 
       // Add the sample to the queue.
       Sample added = pool.acquire();
@@ -204,6 +212,15 @@ public class ShakeDetector implements SensorEventListener {
       }
     }
 
+    /** Changes window size. */
+    void setWindowSize(long size) {
+      maxWindowSize = size;
+      minWindowSize = maxWindowSize >> 1;
+      if (sampleCount > MIN_QUEUE_SIZE) {
+        purge(newest.timestamp - maxWindowSize);
+      }
+    }
+
     /** Copies the samples into a list, with the oldest entry at index 0. */
     List<Sample> asList() {
       List<Sample> list = new ArrayList<Sample>();
@@ -222,7 +239,7 @@ public class ShakeDetector implements SensorEventListener {
     boolean isShaking() {
       return newest != null
           && oldest != null
-          && newest.timestamp - oldest.timestamp >= MIN_WINDOW_SIZE
+          && newest.timestamp - oldest.timestamp >= minWindowSize
           && acceleratingCount >= (sampleCount >> 1) + (sampleCount >> 2);
     }
   }
