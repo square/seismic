@@ -42,7 +42,7 @@
 
     <!-- Dependencies -->
     <android.version>4.1.1.4</android.version>
-    <android.platform>16</android.platform>
+    <android.platform>31</android.platform>
 
     <!-- Test Dependencies -->
     <junit.version>4.13.1</junit.version>
