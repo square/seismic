@@ -25,7 +25,7 @@
 
   <groupId>com.squareup</groupId>
   <artifactId>seismic-parent</artifactId>
-  <version>1.0.3-SNAPSHOT</version>
+  <version>1.0.3</version>
   <packaging>pom</packaging>
 
   <name>Seismic (Parent)</name>
@@ -53,7 +53,7 @@
     <url>http://github.com/square/seismic/</url>
     <connection>scm:git:git://github.com/square/seismic.git</connection>
     <developerConnection>scm:git:ssh://git@github.com/square/seismic.git</developerConnection>
-    <tag>HEAD</tag>
+    <tag>seismic-parent-1.0.3</tag>
   </scm>
 
   <issueManagement>
