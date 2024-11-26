@@ -3,6 +3,9 @@ Seismic
 
 Android device shake detection.
 
+**Deprecated**: This project is deprecated and no new work is planned.
+If you are using Seismic in your codebase and would like to continue working on it, feel free to fork the repo or simply copy the single source file into your codebase.
+
 
 
 Download
