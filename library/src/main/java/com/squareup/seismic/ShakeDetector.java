@@ -22,13 +22,36 @@ public class ShakeDetector implements SensorEventListener {
   public static final int SENSITIVITY_MEDIUM = 13;
   public static final int SENSITIVITY_HARD = 15;
 
+  /** get sensor data as fast as possible */
+  public static final int SENSOR_DELAY_FASTEST = SensorManager.SENSOR_DELAY_FASTEST;
+  /** rate suitable for games */
+  public static final int SENSOR_DELAY_GAME = SensorManager.SENSOR_DELAY_GAME;
+  /** rate suitable for the user interface  */
+  public static final int SENSOR_DELAY_UI = SensorManager.SENSOR_DELAY_UI;
+  /** rate (default) suitable for screen orientation changes */
+  public static final int SENSOR_DELAY_NORMAL = SensorManager.SENSOR_DELAY_NORMAL;
+
   private static final int DEFAULT_ACCELERATION_THRESHOLD = SENSITIVITY_MEDIUM;
+  private static final int DEFAULT_SENSOR_DELAY = SENSOR_DELAY_FASTEST;
 
   /**
    * When the magnitude of total acceleration exceeds this
    * value, the phone is accelerating.
    */
   private int accelerationThreshold = DEFAULT_ACCELERATION_THRESHOLD;
+
+  /**
+   * The rate sensor events are delivered at. This is only a hint to the system.
+   * Events may be received faster or slower than the specified rate.
+   * Usually events are received faster. The value must be one of
+   * {@link #SENSOR_DELAY_NORMAL}, {@link #SENSOR_DELAY_UI},
+   * {@link #SENSOR_DELAY_GAME}, or {@link #SENSOR_DELAY_FASTEST} or,
+   * the desired delay between events in microseconds.
+   * Specifying the delay in microseconds only works from Android 2.3
+   * (API level 9) onwards. For earlier releases, you must use one of
+   * the SENSOR_DELAY_* constants.
+   */
+  private int sensorDelay = DEFAULT_SENSOR_DELAY;
 
   /** Listens for shakes. */
   public interface Listener {
@@ -120,6 +143,11 @@ public class ShakeDetector implements SensorEventListener {
   /** Sets the acceleration threshold sensitivity. */
   public void setSensitivity(int accelerationThreshold) {
     this.accelerationThreshold = accelerationThreshold;
+  }
+
+  /** Sets the sensor delay. */
+  public void setSensorDelay(int sensorDelay) {
+      this.sensorDelay = sensorDelay;
   }
 
   /** Queue of samples. Keeps a running average. */
